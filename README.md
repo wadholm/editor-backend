@@ -19,17 +19,17 @@ Reuslt:
 ```
 [
     {
-        "_id": "6139e88b172abc3f133aebbc",
+        "_id": "613b5f64543b46bac24ff25a",
         "name": "Doc1",
         "content": "Example text."
     },
     {
-        "_id": "613a06d3706f096584c1a61c",
+        "_id": "613b5f94543b46bac24ff25b",
         "name": "Doc2",
         "content": "Example text 2."
     },
     {
-        "_id": "613b32228b283bb58cdad5a9",
+        "_id": "613b5fa9543b46bac24ff25c",
         "name": "Doc3",
         "content": "Example text 3."
     }
@@ -45,9 +45,9 @@ Result:
 ```
 [
     {
-        "_id": "613a06d3706f096584c1a61c",
+        "_id": "613b5f94543b46bac24ff25b",
         "name": "Doc2",
-        "bor": "Example text 2."
+        "content": "Example text 2."
     }
 ]
 ```
@@ -100,7 +100,7 @@ npm install express cors morgan --save
 npm install -g nodemon
 ```
 
-Install MongoDB, find your installations guide per your OS [MongoDB Community Server](https://www.mongodb.com/download-center/community)
+Install MongoDB, find your installations guide per your OS at [MongoDB Community Server](https://www.mongodb.com/download-center/community)
 
 For MacOS run:
 ```
@@ -114,7 +114,7 @@ npm install
 npm install mongodb --save
 ````
 
-In db/database.js add your own dsn. You can run your own on your local system or your cloud based database with MongoDB Atlas
+In db/database.js add your own dsn. You can run your own on your local system or your cloud based database with MongoDB Atlas.  
 Update dsn to your own working database:
 ```
 // local db
@@ -123,18 +123,18 @@ Update dsn to your own working database:
 let dsn = `mongodb+srv://${config.username}:${config.password}@cluster0.0qmae.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 ```
 
-Add your own config.json to store login details and passwords.
+Add your own config.json to store login details and passwords.  
 Make sure you add both node_modules and config.json to your .gitignore.
 
 ## Available Scripts
 
 In the project directory, you can run:
 
-````
+```
 npm start
 ```
 
-Runs the app in the development mode.\
+Runs the app in the development mode.  
 Open [http://localhost:1337](http://localhost:1337) to view it in the browser.
 
 You will also see any lint errors in the console.
@@ -143,12 +143,12 @@ You will also see any lint errors in the console.
 npm run watch
 ```
 
-Runs the app in the development mode.\
-The page will reload if you make edits.\
+Runs the app in the development mode.  
+The page will reload if you make edits.  
 You will also see any lint errors in the console.
 
 ```
 npm run production
 ```
 
-Runs the app in the production mode.\
+Runs the app in the production mode.  

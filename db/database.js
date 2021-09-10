@@ -2,7 +2,7 @@ const mongo = require("mongodb").MongoClient;
 const config = require("../config.json");
 
 // change to docs for assignment
-const collectionName = "crowd";
+const collectionName = "docs";
 
 const database = {
     getDb: async function getDb () {

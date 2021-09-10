@@ -65,11 +65,10 @@ const docs = {
 
         try {
             db = await database.getDb();
-    
-            // change to titel and content after testing
+
             let doc = {
                 name: req.body.name,
-                bor: req.body.bor
+                content: req.body.content
             }
         
             const resultSet = await db.collection.insertOne(doc);
@@ -112,7 +111,7 @@ const docs = {
             const updateDocument = {
                 $set: {
                     name: req.body.name,
-                    bor: req.body.bor,
+                    content: req.body.content,
                 }
             };
 
