@@ -10,7 +10,9 @@ const docs = {
 
             const resultSet = await db.collection.find({}).toArray();
 
-            return res.json(resultSet);
+            return res.status(200).json({
+                data: resultSet
+            });
         } catch (err) {
 
             return res.status(500).json({
@@ -36,7 +38,9 @@ const docs = {
 
             const resultSet = await db.collection.find(filter).toArray();
 
-            return res.json(resultSet);
+            return res.status(200).json({
+                data: resultSet[0]
+            });
         } catch (err) {
 
             return res.status(500).json({
@@ -65,12 +69,12 @@ const docs = {
 
             const resultSet = await db.collection.insertOne(doc);
 
-            if (resultSet.acknowledged) {
-                return res.status(201).send(`Added an object with id ${resultSet.insertedId}`);
-            }
-
-            return res.json(resultSet);
-
+            return res.status(201).json({
+                data: {
+                    message: `Succesfully created a document.`,
+                    created_id: `${resultSet.insertedId}`
+                }
+            });
         } catch (err) {
 
             return res.status(500).json({
@@ -87,45 +91,53 @@ const docs = {
 
     },
     updateOne: async function (req, res) {
-        let db;
-
-        try {
-            db = await database.getDb();
-
-            const filter = { _id: ObjectId(req.body["_id"]) };
-
-            const updateDocument = {
-                $set: {
-                    name: req.body.name,
-                    content: req.body.content,
-                }
+        // req contains user object set in checkToken middleware
+        if (req.body._id) {
+            let _id = req.body._id;
+            
+            let filter = {
+                "_id": ObjectId(_id)
             };
+            let db;
+         
+            try {
+                db = await database.getDb();
 
-            options = { upsert: false };
-
-            const resultSet = await db.collection.updateOne(filter, updateDocument, options);
-
-            if (resultSet.acknowledged) {
+                const updateDocument = {
+                    $set: {
+                        name: req.body.name,
+                        content: req.body.content,
+                    }
+                };
+             
+                options = { upsert: false };
+             
+                const resultSet = await db.collection.updateOne(filter, updateDocument, options);
+             
                 return res.status(204).send();
+            } catch (e) {
+                return res.status(500).json({
+                    error: {
+                        status: 500,
+                        path: "PUT /data UPDATE",
+                        title: "Database error",
+                        message: e.message
+                    }
+                });
+            } finally {
+                await db.client.close();
             }
-
-            return res.json(resultSet);
-        
-        } catch (err) {
-
+        } else {
             return res.status(500).json({
-                errors: {
+                error: {
                     status: 500,
-                    source: "/",
-                    title: "Database error",
-                    detail: err.message
+                    path: "PUT /data no id",
+                    title: "No id",
+                    message: "No data id provided"
                 }
             });
-        } finally {
-            await db.client.close();
         }
     }
-
 }
 
 module.exports = docs;

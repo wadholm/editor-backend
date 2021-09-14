@@ -17,23 +17,26 @@ GET /docs
 ```
 Reuslt:
 ```
-[
-    {
-        "_id": "613b5f64543b46bac24ff25a",
-        "name": "Doc1",
-        "content": "Example text."
-    },
-    {
-        "_id": "613b5f94543b46bac24ff25b",
-        "name": "Doc2",
-        "content": "Example text 2."
-    },
-    {
-        "_id": "613b5fa9543b46bac24ff25c",
-        "name": "Doc3",
-        "content": "Example text 3."
-    }
-]
+
+{
+    "data": [
+        {
+            "_id": "613b5f64543b46bac24ff25a",
+            "name": "Doc1",
+            "content": "Example text."
+        },
+        {
+            "_id": "613b5f94543b46bac24ff25b",
+            "name": "Doc2",
+            "content": "Example text 2."
+        },
+        {
+            "_id": "613b5fa9543b46bac24ff25c",
+            "name": "Doc3",
+            "content": "Example text 3."
+        }
+    ]
+}
 ```
 
 #### To get a specific document
@@ -43,13 +46,13 @@ GET /docs/:id
 
 Result:
 ```
-[
-    {
+{
+    "data": {
         "_id": "613b5f94543b46bac24ff25b",
         "name": "Doc2",
         "content": "Example text 2."
     }
-]
+}
 ```
 
 #### To add a document
@@ -65,7 +68,12 @@ content
 
 Result:
 ```
-Added an object with id 613b41998b283bb58cdad5aa
+{
+    "data": {
+        "message": "Succesfully added a document. ",
+        "created_id": "6140c6eadcd10f127c912304"
+    }
+}
 ```
 
 #### To update a document
@@ -79,6 +87,11 @@ Required parameters:
 _id
 name
 content
+```
+
+Result:
+```
+HTTP Status Code 204 No Content
 ```
 
 

@@ -1,14 +1,12 @@
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
-// const database = require("./db/database.js");
+const bodyParser = require('body-parser');
 
 const app = express();
-const bodyParser = require('body-parser');
 
 const index = require("./routes/index");
 const docs = require('./routes/docs');
-
 
 const port = process.env.PORT || 1337;
 
@@ -37,10 +35,14 @@ app.use('/', index);
 app.use('/docs', docs);
 
 
-// Start up server
-app.listen(port, () => {
-    console.log(`Example API listening on port ${port}!`);
-    // console.log(`DSN is: ${dsn}`);
+// // Start up server
+// app.listen(port, () => {
+//     console.log(`Example API listening on port ${port}!`);
+//     // console.log(`DSN is: ${dsn}`);
+// });
+
+const server = app.listen(port, () => {
+    console.log(`Editor API listening on port ${port}!`);
 });
 
 
@@ -68,3 +70,5 @@ app.use((err, req, res, next) => {
         ]
     });
 });
+
+module.exports = server;

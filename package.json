@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "nyc --reporter=html --reporter=text mocha 'test/*.js' --timeout 10000",
     "start": "node app.js",
     "watch": "nodemon app.js",
     "production": "NODE_ENV='production' node app.js"
@@ -16,5 +16,11 @@
     "express": "^4.17.1",
     "mongodb": "^4.1.1",
     "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
+    "mocha": "^9.1.1",
+    "nyc": "^15.1.0"
   }
 }
