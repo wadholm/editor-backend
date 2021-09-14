@@ -15,7 +15,7 @@ content
 ```
 GET /docs
 ```
-Reuslt:
+Result:
 ```
 
 {
