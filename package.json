@@ -5,9 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "nyc --reporter=html --reporter=text mocha 'test/*.js' --timeout 10000",
+    "posttest": "npm run eslint",
     "start": "node app.js",
     "watch": "nodemon app.js",
-    "production": "NODE_ENV='production' node app.js"
+    "production": "NODE_ENV='production' node app.js",
+    "clean": "rm -rf node_modules package-lock.json",
+    "eslint": "eslint ."
   },
   "author": "",
   "license": "ISC",
@@ -20,7 +23,13 @@
   "devDependencies": {
     "chai": "^4.3.4",
     "chai-http": "^4.3.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-react": "^7.25.1",
+    "javascript-style-guide": "^1.0.1",
     "mocha": "^9.1.1",
     "nyc": "^15.1.0"
+  },
+  "eslintConfig": {
+    "extends": "eslint:recommended"
   }
 }

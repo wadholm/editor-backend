@@ -1,4 +1,5 @@
 # jsramverk editor API
+[![Build Status](https://app.travis-ci.com/wadholm/editor-backend.svg?branch=main)](https://app.travis-ci.com/wadholm/editor-backend)
 
 This API is build as a part of the course jsramverk at BTH.
 

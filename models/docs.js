@@ -14,7 +14,6 @@ const docs = {
                 data: resultSet
             });
         } catch (err) {
-
             return res.status(500).json({
                 errors: {
                     status: 500,
@@ -26,7 +25,6 @@ const docs = {
         } finally {
             await db.client.close();
         }
-
     },
     readOne: async function(req, res) {
         let db;
@@ -42,7 +40,6 @@ const docs = {
                 data: resultSet[0]
             });
         } catch (err) {
-
             return res.status(500).json({
                 errors: {
                     status: 500,
@@ -54,7 +51,6 @@ const docs = {
         } finally {
             await db.client.close();
         }
-
     },
     addOne: async function(req, res) {
         let db;
@@ -65,7 +61,7 @@ const docs = {
             let doc = {
                 name: req.body.name,
                 content: req.body.content
-            }
+            };
 
             const resultSet = await db.collection.insertOne(doc);
 
@@ -76,7 +72,6 @@ const docs = {
                 }
             });
         } catch (err) {
-
             return res.status(500).json({
                 errors: {
                     status: 500,
@@ -88,18 +83,16 @@ const docs = {
         } finally {
             await db.client.close();
         }
-
     },
     updateOne: async function (req, res) {
         // req contains user object set in checkToken middleware
         if (req.body._id) {
             let _id = req.body._id;
-            
             let filter = {
                 "_id": ObjectId(_id)
             };
             let db;
-         
+
             try {
                 db = await database.getDb();
 
@@ -109,11 +102,11 @@ const docs = {
                         content: req.body.content,
                     }
                 };
-             
-                options = { upsert: false };
-             
-                const resultSet = await db.collection.updateOne(filter, updateDocument, options);
-             
+
+                let options = { upsert: false };
+
+                await db.collection.updateOne(filter, updateDocument, options);
+
                 return res.status(204).send();
             } catch (e) {
                 return res.status(500).json({
@@ -138,6 +131,6 @@ const docs = {
             });
         }
     }
-}
+};
 
 module.exports = docs;

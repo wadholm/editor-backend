@@ -7,6 +7,7 @@ router.get("/", (req, res) => {
             msg: "This is the index page"
         }
     };
+
     res.json(data);
 });
 

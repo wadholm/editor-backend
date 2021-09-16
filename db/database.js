@@ -5,10 +5,11 @@ const config = require("../config.json");
 const collectionName = "docs";
 
 const database = {
-    getDb: async function getDb () {
-
+    getDb: async function getDb() {
         // MongoDB Atlas
-        let dsn = `mongodb+srv://${config.username}:${config.password}@cluster0.0qmae.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+        let dsn = `mongodb+srv://${config.username}:${config.password}` +
+        `@cluster0.0qmae.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+
         // let dsn = "mongodb://localhost:27017/test";
         // Test db
         if (process.env.NODE_ENV === 'test') {

@@ -1,3 +1,4 @@
+/* global it describe */
 
 process.env.NODE_ENV = 'test';
 
