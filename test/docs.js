@@ -103,17 +103,33 @@ describe('Docs', () => {
             });
     });
 
-    // describe('GET /docs/id', () => {
-    //     it('should get 500 as we do not provide valid id', (done) => {
-    //         chai.request(server)
-    //             .get("/docs/id")
-    //             .end((err, res) => {
-    //                 res.should.have.status(500);
-    //                 res.body.should.be.an("object");
-    //                 res.body.errors.status.should.be.equal(500);
+    it('should get 200 getting one document by id', (done) => {
+        let testDoc = {
+            _id: _id,
+        };
 
-    //                 done();
-    //             });
-    //     });
-    // });
+        chai.request(server)
+            .get(`/docs/${testDoc._id}`)
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.have.property("data");
+                res.body.data.should.be.an("array");
+                res.body.data.length.should.be.above(0);
+
+                done();
+            });
+    });
+
+    it('should get 500 for incorrect id', (done) => {
+        let testDoc = {
+            _id: 0,
+        };
+
+        chai.request(server)
+            .get(`/docs/${testDoc._id}`)
+            .end((err, res) => {
+                res.should.have.status(500);
+                done();
+            });
+    });
 });

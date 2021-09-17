@@ -49,27 +49,27 @@ const server = app.listen(port, () => {
 // Add routes for 404 and error handling
 // Catch 404 and forward to error handler
 // Put this last
-app.use((req, res, next) => {
-    var err = new Error("Not Found");
+// app.use((req, res, next) => {
+//     var err = new Error("Not Found");
 
-    err.status = 404;
-    next(err);
-});
+//     err.status = 404;
+//     next(err);
+// });
 
-app.use((err, req, res, next) => {
-    if (res.headersSent) {
-        return next(err);
-    }
+// app.use((err, req, res, next) => {
+//     if (res.headersSent) {
+//         return next(err);
+//     }
 
-    res.status(err.status || 500).json({
-        "errors": [
-            {
-                "status": err.status,
-                "title":  err.message,
-                "detail": err.message
-            }
-        ]
-    });
-});
+//     res.status(err.status || 500).json({
+//         "errors": [
+//             {
+//                 "status": err.status,
+//                 "title":  err.message,
+//                 "detail": err.message
+//             }
+//         ]
+//     });
+// });
 
 module.exports = server;

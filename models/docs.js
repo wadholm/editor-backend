@@ -2,7 +2,7 @@ const database = require("../db/database.js");
 const ObjectId = require('mongodb').ObjectId;
 
 const docs = {
-    readAll: async function(req, res) {
+    readAll: async function(res) {
         let db;
 
         try {
@@ -26,18 +26,18 @@ const docs = {
             await db.client.close();
         }
     },
-    readOne: async function(req, res) {
+    readOne: async function(id, res) {
         let db;
 
         try {
             db = await database.getDb();
 
-            const filter = {_id: ObjectId(req.params.id)};
+            const filter = {_id: ObjectId(id)};
 
             const resultSet = await db.collection.find(filter).toArray();
 
             return res.status(200).json({
-                data: resultSet[0]
+                data: resultSet
             });
         } catch (err) {
             return res.status(500).json({
