@@ -3,7 +3,18 @@ const cors = require("cors");
 const morgan = require("morgan");
 const bodyParser = require('body-parser');
 
+const docsModel = require("./models/docs.js");
+
 const app = express();
+const server = require("http").createServer(app);
+
+const io = require("socket.io")(server, {
+    cors: {
+        origin: "https://www.student.bth.se/~mack20/editor",
+        // origin: "http://localhost:3000",
+        methods: ["GET", "POST"]
+    }
+});
 
 const index = require("./routes/index");
 const docs = require('./routes/docs');
@@ -24,8 +35,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // This is middleware called for all routes.
 // Middleware takes three parameters.
 app.use((req, res, next) => {
-    console.log(req.method);
-    console.log(req.path);
+    // console.log(req.method);
+    // console.log(req.path);
     next();
 });
 
@@ -34,42 +45,28 @@ app.use(express.json());
 app.use('/', index);
 app.use('/docs', docs);
 
+io.on('connection', socket => {
+    let prevID;
 
-// // Start up server
-// app.listen(port, () => {
-//     console.log(`Example API listening on port ${port}!`);
-//     // console.log(`DSN is: ${dsn}`);
-// });
+    socket.on('create', room => {
+        socket.leave(prevID);
+        socket.join(room);
+        prevID = room;
+    });
 
-const server = app.listen(port, () => {
-    console.log(`Editor API listening on port ${port}!`);
+    socket.on("update", data => {
+        socket.to(data._id).emit("update", data);
+        if (data._id !== "") {
+            docsModel.updateFromSocket(data);
+            // socket.to(data._id).emit("update", data);
+        }
+
+        // Spara till databas och göra annat med data
+    });
 });
 
+server.listen(port, () => {
+    console.info(`Server is listening on port ${port}.`);
+});
 
-// Add routes for 404 and error handling
-// Catch 404 and forward to error handler
-// Put this last
-// app.use((req, res, next) => {
-//     var err = new Error("Not Found");
-
-//     err.status = 404;
-//     next(err);
-// });
-
-// app.use((err, req, res, next) => {
-//     if (res.headersSent) {
-//         return next(err);
-//     }
-
-//     res.status(err.status || 500).json({
-//         "errors": [
-//             {
-//                 "status": err.status,
-//                 "title":  err.message,
-//                 "detail": err.message
-//             }
-//         ]
-//     });
-// });
-
-module.exports = server;
+// module.exports = server;

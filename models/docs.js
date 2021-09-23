@@ -130,6 +130,39 @@ const docs = {
                 }
             });
         }
+    },
+    updateFromSocket: async function (req) {
+        // req contains user object set in checkToken middleware
+        if (req._id) {
+            let _id = req._id;
+            let filter = {
+                "_id": ObjectId(_id)
+            };
+            let db;
+
+            try {
+                db = await database.getDb();
+
+                const updateDocument = {
+                    $set: {
+                        name: req.name,
+                        content: req.html,
+                    }
+                };
+
+                let options = { upsert: false };
+
+                await db.collection.updateOne(filter, updateDocument, options);
+
+                return "Success!!";
+            } catch (e) {
+                return "Error!";
+            } finally {
+                await db.client.close();
+            }
+        } else {
+            return "Error, no id provided!";
+        }
     }
 };
 
