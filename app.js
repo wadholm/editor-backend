@@ -60,7 +60,6 @@ io.on('connection', socket => {
             docsModel.updateFromSocket(data);
             // socket.to(data._id).emit("update", data);
         }
-
         // Spara till databas och göra annat med data
     });
 });
@@ -69,4 +68,4 @@ server.listen(port, () => {
     console.info(`Server is listening on port ${port}.`);
 });
 
-// module.exports = server;
+module.exports = server;
