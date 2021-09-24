@@ -50,10 +50,15 @@ io.on('connection', socket => {
         prevID = room;
     });
 
+    let throttleTimer;
+
     socket.on("update", data => {
         socket.to(data._id).emit("update", data);
         if (data._id !== "") {
-            docsModel.updateFromSocket(data);
+            clearTimeout(throttleTimer);
+            throttleTimer = setTimeout(function() {
+                docsModel.updateFromSocket(data);
+            }, 2000);
         }
     });
 });
