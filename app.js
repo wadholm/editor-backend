@@ -26,17 +26,13 @@ app.use(cors());
 // don't show the log when it is test
 if (process.env.NODE_ENV !== 'test') {
     // use morgan to log at command line
-    app.use(morgan('combined')); // 'combined' outputs the Apache style LOGs
+    app.use(morgan('combined'));
 }
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// This is middleware called for all routes.
-// Middleware takes three parameters.
 app.use((req, res, next) => {
-    // console.log(req.method);
-    // console.log(req.path);
     next();
 });
 
@@ -58,9 +54,7 @@ io.on('connection', socket => {
         socket.to(data._id).emit("update", data);
         if (data._id !== "") {
             docsModel.updateFromSocket(data);
-            // socket.to(data._id).emit("update", data);
         }
-        // Spara till databas och göra annat med data
     });
 });
 
