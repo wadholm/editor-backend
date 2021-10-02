@@ -1,27 +1,33 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const bodyParser = require('body-parser');
+// const docsModel = require("./models/docs.js");
+const usersModel = require("./models/users.js");
+// eslint-disable-next-line no-unused-vars
+const { devUrl, prodUrl, token } = require("./variables");
 
-const docsModel = require("./models/docs.js");
+const ENDPOINT = prodUrl;
 
 const app = express();
 const server = require("http").createServer(app);
 
 const io = require("socket.io")(server, {
     cors: {
-        origin: "https://www.student.bth.se",
-        // origin: "http://localhost:3000",
+        // origin: "https://www.student.bth.se",
+        origin: ENDPOINT,
         methods: ["GET", "POST"]
     }
 });
 
 const index = require("./routes/index");
 const docs = require('./routes/docs');
+const prevdocs = require('./routes/prevdocs');
+const users = require('./routes/users');
+const auth = require('./routes/auth');
 
 const port = process.env.PORT || 1337;
-
-app.use(cors());
 
 // don't show the log when it is test
 if (process.env.NODE_ENV !== 'test') {
@@ -29,6 +35,11 @@ if (process.env.NODE_ENV !== 'test') {
     app.use(morgan('combined'));
 }
 
+app.use(cors({
+    origin: ENDPOINT,
+    credentials: true
+}));
+app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -36,10 +47,11 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(express.json());
-
 app.use('/', index);
 app.use('/docs', docs);
+app.use('/prevdocs', prevdocs);
+app.use('/users', users);
+app.use('/auth', auth);
 
 io.on('connection', socket => {
     let prevID;
@@ -57,7 +69,8 @@ io.on('connection', socket => {
         if (data._id !== "") {
             clearTimeout(throttleTimer);
             throttleTimer = setTimeout(function() {
-                docsModel.updateFromSocket(data);
+                console.log(data);
+                usersModel.updateFromSocket(data);
             }, 2000);
         }
     });

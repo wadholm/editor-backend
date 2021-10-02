@@ -39,10 +39,10 @@ describe('Docs', () => {
         });
     });
 
-    describe('GET /docs', () => {
-        it('200 HAPPY PATH for docs', (done) => {
+    describe('GET /prevdocs', () => {
+        it('200 HAPPY PATH for prevdocs', (done) => {
             chai.request(server)
-                .get("/docs")
+                .get("/prevdocs")
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.an("object");
@@ -61,7 +61,7 @@ describe('Docs', () => {
         };
 
         chai.request(server)
-            .post("/docs")
+            .post("/prevdocs")
             .send(testDoc)
             .end((err, res) => {
                 res.should.have.status(201);
@@ -80,7 +80,7 @@ describe('Docs', () => {
         };
 
         chai.request(server)
-            .put("/docs")
+            .put("/prevdocs")
             .send(testDoc)
             .end((err, res) => {
                 res.should.have.status(500);
@@ -95,7 +95,7 @@ describe('Docs', () => {
         };
 
         chai.request(server)
-            .put("/docs")
+            .put("/prevdocs")
             .send(testDoc)
             .end((err, res) => {
                 res.should.have.status(204);
@@ -109,7 +109,7 @@ describe('Docs', () => {
         };
 
         chai.request(server)
-            .get(`/docs/${testDoc._id}`)
+            .get(`/prevdocs/${testDoc._id}`)
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.have.property("data");
@@ -126,7 +126,7 @@ describe('Docs', () => {
         };
 
         chai.request(server)
-            .get(`/docs/${testDoc._id}`)
+            .get(`/prevdocs/${testDoc._id}`)
             .end((err, res) => {
                 res.should.have.status(500);
                 done();
