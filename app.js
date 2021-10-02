@@ -8,7 +8,7 @@ const usersModel = require("./models/users.js");
 // eslint-disable-next-line no-unused-vars
 const { devUrl, prodUrl, token } = require("./variables");
 
-const ENDPOINT = prodUrl;
+const ENDPOINT = devUrl;
 
 const app = express();
 const server = require("http").createServer(app);

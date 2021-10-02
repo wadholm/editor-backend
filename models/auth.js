@@ -4,14 +4,15 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 let config;
+let jwtSecret;
 
-try {
+if (process.env.NODE_ENV !== 'test') {
     config = require("../config.json");
-} catch (error) {
-    console.error(error);
+    jwtSecret = process.env.JWT_SECRET || config.token;
 }
 
-const jwtSecret = process.env.JWT_SECRET || config.token;
+// const jwtSecret = process.env.JWT_SECRET || config.token;
+jwtSecret = process.env.JWT_SECRET;
 
 const auth = {
     login: async function(req, res) {
