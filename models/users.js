@@ -3,7 +3,37 @@ const ObjectId = require('mongodb').ObjectId;
 const bcrypt = require("bcryptjs");
 
 const users = {
-    readAll: async function(res) {
+    getAll: async function getAll(
+        res=undefined,
+    ) {
+        let db;
+
+        try {
+            db = await database.getDb();
+
+            let result = await db.collection.find({}).toArray();
+
+            if (res === undefined) {
+                return result;
+            }
+
+            return res.json({
+                data: result
+            });
+        } catch (e) {
+            return res.json({
+                errors: {
+                    status: 500,
+                    name: "Database Error",
+                    description: e.message,
+                    path: "/",
+                }
+            });
+        } finally {
+            await db.client.close();
+        }
+    },
+    readAll: async function (res) {
         let db;
 
         try {

@@ -3,8 +3,18 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const bodyParser = require('body-parser');
-// const docsModel = require("./models/docs.js");
+
+const visual = false;
+const { graphqlHTTP } = require('express-graphql');
+const {
+    GraphQLSchema
+} = require("graphql");
+
+const RootQueryType = require("./graphql/root.js");
+
+// const database = require("./db/dbusers.js");
 const usersModel = require("./models/users.js");
+
 // eslint-disable-next-line no-unused-vars
 const { devUrl, prodUrl, token } = require("./variables");
 
@@ -46,6 +56,28 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use((req, res, next) => {
     next();
 });
+
+// const schema = new GraphQLSchema({
+//     query: new GraphQLObjectType({
+//         name: "HelloWorld",
+//         fields: () => ({
+//             message: {
+//                 type: GraphQLString,
+//                 resolve: () => "Hello World"
+//             }
+//         })
+//     })
+// });
+
+const schema = new GraphQLSchema({
+    query: RootQueryType
+});
+
+app.use('/graphql', graphqlHTTP({
+    schema: schema,
+    graphiql: visual,
+}));
+
 
 app.use('/', index);
 app.use('/docs', docs);
