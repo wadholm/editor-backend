@@ -69,7 +69,7 @@ Result:
 #### To delete a user
 ```
 DELETE /users
-
+```
 
 Required parameters:
 ```
@@ -79,7 +79,7 @@ email
 Result:
 ```
 HTTP Status Code 200 OK
-
+```
 
 #### To add a user
 ```
