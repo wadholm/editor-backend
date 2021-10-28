@@ -7,6 +7,10 @@ router.get('/',
     (req, res) => users.readAll(res)
 );
 
+router.delete('/',
+    (req, res) => users.deleteOne(req, res)
+);
+
 // router.get('/:id',
 //     (req, res) => users.readOne(req.params.id, res)
 // );
@@ -26,9 +30,5 @@ router.get('/',
 // router.put('/add/code',
 //     (req, res) => users.addCode(req, res)
 // );
-
-router.delete('/',
-    (req, res) => users.deleteOne(req, res)
-);
 
 module.exports = router;

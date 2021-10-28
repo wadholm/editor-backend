@@ -3,6 +3,17 @@
 
 This API is build as a part of the course jsramverk at BTH.
 
+### Users
+
+A user has the following attributes:
+```
+_id
+email
+password
+docs
+codes
+```
+
 ### Docs
 
 A document has the following attributes:
@@ -13,9 +24,19 @@ content
 allowed_users
 ```
 
-#### To get all documents
+### Codes
+
+A code-document has the following attributes:
 ```
-GET /docs
+_id
+name
+content
+allowed_users
+```
+
+#### To get all users
+```
+GET /users
 ```
 Result:
 ```
@@ -24,55 +45,99 @@ Result:
     "data": [
         {
             "_id": "613b5f64543b46bac24ff25a",
-            "name": "Doc1",
-            "content": "Example text."
+            "email": "user1@example.com",
+            "password": "pass",
+            "docs": [],
+            "codes": []
         },
         {
-            "_id": "613b5f94543b46bac24ff25b",
-            "name": "Doc2",
-            "content": "Example text 2."
+            "email": "user2@example.com",
+            "password": "pass",
+            "docs": [],
+            "codes": []
         },
         {
-            "_id": "613b5fa9543b46bac24ff25c",
-            "name": "Doc3",
-            "content": "Example text 3."
+            "email": "user3@example.com",
+            "password": "pass",
+            "docs": [],
+            "codes": []
         }
     ]
 }
 ```
 
-#### To get a specific document
+#### To delete a user
 ```
-GET /docs/:id
+DELETE /users
+
+
+Required parameters:
+```
+email
 ```
 
 Result:
 ```
-{
-    "data": {
-        "_id": "613b5f94543b46bac24ff25b",
-        "name": "Doc2",
-        "content": "Example text 2."
-    }
-}
-```
+HTTP Status Code 200 OK
 
-#### To add a document
+
+#### To add a user
 ```
-POST /docs
+POST /auth/register
 ```
 
 Required parameters:
 ```
-name
-content
+email
+password
 ```
 
 Result:
 ```
 {
     "data": {
-        "message": "Succesfully added a document. ",
+        "title": "Succesfully created a user.",
+        "message": "Succesfully created a user.",
+        "created_email": "user@example.com"
+    }
+}
+```
+
+#### To login a user
+
+```
+POST /auth/login
+```
+
+Required parameters:
+```
+email
+password
+```
+
+Result:
+```
+HTTP Status Code 201
+```
+
+#### To add a document
+```
+PUT /docs/add
+```
+
+Required parameters:
+```
+email
+name
+content
+allowed_users
+```
+
+Result:
+```
+{
+    "data": {
+        "message": "Succesfully created a document. ",
         "created_id": "6140c6eadcd10f127c912304"
     }
 }
@@ -81,7 +146,7 @@ Result:
 #### To update a document
 
 ```
-PUT /docs
+PUT /docs/update
 ```
 
 Required parameters:
@@ -89,6 +154,81 @@ Required parameters:
 _id
 name
 content
+allowed_users
+```
+
+Result:
+```
+HTTP Status Code 204 No Content
+```
+
+#### To add an allowed user to document
+```
+PUT /docs/add/allowed_user
+```
+
+Required parameters:
+```
+_id
+new_user
+```
+
+Result:
+```
+HTTP Status Code 204 No Content
+```
+
+#### To add a code-document
+```
+PUT /codes/add
+```
+
+Required parameters:
+```
+email
+name
+content
+allowed_users
+```
+
+Result:
+```
+{
+    "data": {
+        "message": "Succesfully created a code-document. ",
+        "created_id": "6140c6eadcd10f127c912304"
+    }
+}
+```
+
+#### To update a code-document
+
+```
+PUT /codes/update
+```
+
+Required parameters:
+```
+_id
+name
+content
+allowed_users
+```
+
+Result:
+```
+HTTP Status Code 204 No Content
+```
+
+#### To add an allowed user to a code-document
+```
+PUT /codes/add/allowed_user
+```
+
+Required parameters:
+```
+_id
+new_user
 ```
 
 Result:
