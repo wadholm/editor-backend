@@ -526,26 +526,26 @@ describe('Users', () => {
             });
         });
         describe('Auth model', () => {
-            it('should get 201 HAPPY PATH', (done) => {
-                let user = {
-                    email: "user2@test.com",
-                    password: "test",
-                };
+            // it('should get 201 HAPPY PATH', (done) => {
+            //     let user = {
+            //         email: "user2@test.com",
+            //         password: "test",
+            //     };
 
-                chai.request(server)
-                    .post("/auth/login")
-                    .send(user)
-                    .end((err, res) => {
-                        res.should.have.status(200);
-                        res.body.should.be.an("object");
-                        res.body.should.have.property("data");
-                        res.body.data.should.have.property("type");
-                        res.body.data.type.should.equal("success");
-                        res.body.data.should.have.property("type");
+            //     chai.request(server)
+            //         .post("/auth/login")
+            //         .send(user)
+            //         .end((err, res) => {
+            //             res.should.have.status(200);
+            //             res.body.should.be.an("object");
+            //             res.body.should.have.property("data");
+            //             res.body.data.should.have.property("type");
+            //             res.body.data.type.should.equal("success");
+            //             res.body.data.should.have.property("type");
 
-                        done();
-                    });
-            });
+            //             done();
+            //         });
+            // });
             it('should get 401 email missing', (done) => {
                 let user = {
                     // email: "user2@test.com",
