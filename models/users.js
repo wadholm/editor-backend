@@ -57,108 +57,108 @@ const users = {
             await db.client.close();
         }
     },
-    readOne: async function(id, res) {
-        let db;
+    // readOne: async function(id, res) {
+    //     let db;
 
-        try {
-            db = await database.getDb();
+    //     try {
+    //         db = await database.getDb();
 
-            const filter = {_id: ObjectId(id)};
+    //         const filter = {_id: ObjectId(id)};
 
-            const resultSet = await db.collection.find(filter).toArray();
+    //         const resultSet = await db.collection.find(filter).toArray();
 
-            return res.status(200).json({
-                data: resultSet
-            });
-        } catch (err) {
-            return res.status(500).json({
-                errors: {
-                    status: 500,
-                    source: "/",
-                    title: "Database error",
-                    detail: err.message
-                }
-            });
-        } finally {
-            await db.client.close();
-        }
-    },
-    getAllowedDocs: async function(email, res) {
-        let db;
+    //         return res.status(200).json({
+    //             data: resultSet
+    //         });
+    //     } catch (err) {
+    //         return res.status(500).json({
+    //             errors: {
+    //                 status: 500,
+    //                 source: "/",
+    //                 title: "Database error",
+    //                 detail: err.message
+    //             }
+    //         });
+    //     } finally {
+    //         await db.client.close();
+    //     }
+    // // },
+    // getAllowedDocs: async function(email, res) {
+    //     let db;
 
-        try {
-            db = await database.getDb();
+    //     try {
+    //         db = await database.getDb();
 
-            const filter = { "docs.allowed_users": email };
+    //         const filter = { "docs.allowed_users": email };
 
 
-            const resultSet = await db.collection.find(filter).toArray();
-            let returnData;
+    //         const resultSet = await db.collection.find(filter).toArray();
+    //         let returnData;
 
-            let receivedData = Object.values(resultSet);
+    //         let receivedData = Object.values(resultSet);
 
-            returnData = receivedData.map(a => a.docs);
-            const concatDocs = [].concat.apply([], returnData);
+    //         returnData = receivedData.map(a => a.docs);
+    //         const concatDocs = [].concat.apply([], returnData);
 
-            return res.status(200).json({
-                data: concatDocs
-            });
-        } catch (err) {
-            return res.status(500).json({
-                errors: {
-                    status: 500,
-                    source: "/",
-                    title: "Database error",
-                    detail: err.message
-                }
-            });
-        } finally {
-            await db.client.close();
-        }
-    },
-    getAllowedUsers: async function(res) {
-        let db;
+    //         return res.status(200).json({
+    //             data: concatDocs
+    //         });
+    //     } catch (err) {
+    //         return res.status(500).json({
+    //             errors: {
+    //                 status: 500,
+    //                 source: "/",
+    //                 title: "Database error",
+    //                 detail: err.message
+    //             }
+    //         });
+    //     } finally {
+    //         await db.client.close();
+    //     }
+    // },
+    // getAllowedUsers: async function(res) {
+    //     let db;
 
-        try {
-            db = await database.getDb();
+    //     try {
+    //         db = await database.getDb();
 
-            const resultSet = await db.collection.find({}).toArray();
+    //         const resultSet = await db.collection.find({}).toArray();
 
-            return res.status(200).json({
-                data: resultSet
-            });
-        } catch (err) {
-            return res.status(500).json({
-                errors: {
-                    status: 500,
-                    source: "/",
-                    title: "Database error",
-                    detail: err.message
-                }
-            });
-        } finally {
-            await db.client.close();
-        }
-    },
-    findOne: async function(email) {
-        let db;
+    //         return res.status(200).json({
+    //             data: resultSet
+    //         });
+    //     } catch (err) {
+    //         return res.status(500).json({
+    //             errors: {
+    //                 status: 500,
+    //                 source: "/",
+    //                 title: "Database error",
+    //                 detail: err.message
+    //             }
+    //         });
+    //     } finally {
+    //         await db.client.close();
+    //     }
+    // },
+    // findOne: async function(email) {
+    //     let db;
 
-        try {
-            db = await database.getDb();
+    //     try {
+    //         db = await database.getDb();
 
-            const filter = {email: email};
+    //         const filter = {email: email};
 
-            const user = await db.collection.findOne(filter);
+    //         const user = await db.collection.findOne(filter);
 
-            // console.log(user);
+    //         // console.log(user);
 
-            return user;
-        } catch (err) {
-            return "Error";
-        } finally {
-            await db.client.close();
-        }
-    },
+    //         return user;
+    //     } catch (err) {
+    //         return "Error";
+    //     } finally {
+    //         await db.client.close();
+    //     }
+    // },
     addUser: async function(req, res) {
         let db;
 
@@ -224,341 +224,341 @@ const users = {
             await db.client.close();
         }
     },
-    updateUserPassword: async function (req, res) {
-        // req contains user object set in checkToken middleware
-        if (req.body._id) {
-            let _id = req.body._id;
-            let filter = {
-                "_id": ObjectId(_id)
-            };
-            let db;
+    // updateUserPassword: async function (req, res) {
+    //     // req contains user object set in checkToken middleware
+    //     if (req.body._id) {
+    //         let _id = req.body._id;
+    //         let filter = {
+    //             "_id": ObjectId(_id)
+    //         };
+    //         let db;
 
-            try {
-                db = await database.getDb();
+    //         try {
+    //             db = await database.getDb();
 
-                const updateUser = {
-                    $set: {
-                        password: req.body.password,
-                    }
-                };
+    //             const updateUser = {
+    //                 $set: {
+    //                     password: req.body.password,
+    //                 }
+    //             };
 
-                let options = { upsert: false };
+    //             let options = { upsert: false };
 
-                await db.collection.updateOne(filter, updateUser, options);
+    //             await db.collection.updateOne(filter, updateUser, options);
 
-                return res.status(204).send();
-            } catch (e) {
-                return res.status(500).json({
-                    error: {
-                        status: 500,
-                        path: "PUT /data UPDATE",
-                        title: "Database error",
-                        message: e.message
-                    }
-                });
-            } finally {
-                await db.client.close();
-            }
-        } else {
-            return res.status(500).json({
-                error: {
-                    status: 500,
-                    path: "PUT /data no id",
-                    title: "No id",
-                    message: "No data id provided"
-                }
-            });
-        }
-    },
-    addCode: async function (req, res) {
-        // req contains user object set in checkToken middleware
-        let db;
+    //             return res.status(204).send();
+    //         } catch (e) {
+    //             return res.status(500).json({
+    //                 error: {
+    //                     status: 500,
+    //                     path: "PUT /data UPDATE",
+    //                     title: "Database error",
+    //                     message: e.message
+    //                 }
+    //             });
+    //         } finally {
+    //             await db.client.close();
+    //         }
+    //     } else {
+    //         return res.status(500).json({
+    //             error: {
+    //                 status: 500,
+    //                 path: "PUT /data no id",
+    //                 title: "No id",
+    //                 message: "No data id provided"
+    //             }
+    //         });
+    //     }
+    // },
+    // addCode: async function (req, res) {
+    //     // req contains user object set in checkToken middleware
+    //     let db;
 
-        try {
-            db = await database.getDb();
-            // await db.collection.updateOne(filter, updateUser, options);
-            await db.collection.updateMany({}, {$set: { codes: [] }});
-            return res.status(204).send();
-        } catch (e) {
-            return res.status(500).json({
-                error: {
-                    status: 500,
-                    path: "PUT /data UPDATE",
-                    title: "Database error",
-                    message: e.message
-                }
-            });
-        } finally {
-            await db.client.close();
-        }
-    },
-    addDoc: async function (req, res) {
-        // req contains user object set in checkToken middleware
-        if (req.body.email) {
-            let db;
+    //     try {
+    //         db = await database.getDb();
+    //         // await db.collection.updateOne(filter, updateUser, options);
+    //         await db.collection.updateMany({}, {$set: { codes: [] }});
+    //         return res.status(204).send();
+    //     } catch (e) {
+    //         return res.status(500).json({
+    //             error: {
+    //                 status: 500,
+    //                 path: "PUT /data UPDATE",
+    //                 title: "Database error",
+    //                 message: e.message
+    //             }
+    //         });
+    //     } finally {
+    //         await db.client.close();
+    //     }
+    // },
+    // addDoc: async function (req, res) {
+    //     // req contains user object set in checkToken middleware
+    //     if (req.body.email) {
+    //         let db;
 
-            try {
-                db = await database.getDb();
+    //         try {
+    //             db = await database.getDb();
 
-                const filter = {email: req.body.email};
-                const currentUser = await db.collection.findOne(filter);
+    //             const filter = {email: req.body.email};
+    //             const currentUser = await db.collection.findOne(filter);
 
-                const resultSet = await db.collection.find({}).toArray();
+    //             const resultSet = await db.collection.find({}).toArray();
 
-                let receivedDocs = Object.values(resultSet);
+    //             let receivedDocs = Object.values(resultSet);
 
-                let allAuthedUsers = [];
+    //             let allAuthedUsers = [];
 
-                for (const nestedArrayOfDocs of receivedDocs) {
-                    allAuthedUsers.push(nestedArrayOfDocs.email);
-                    // console.log(allAuthedUsers);
-                }
+    //             for (const nestedArrayOfDocs of receivedDocs) {
+    //                 allAuthedUsers.push(nestedArrayOfDocs.email);
+    //                 // console.log(allAuthedUsers);
+    //             }
 
-                // const allUsers = resultSet.data.email;
+    //             // const allUsers = resultSet.data.email;
 
-                // const resultSet = await db.collection.find(filter).toArray();
+    //             // const resultSet = await db.collection.find(filter).toArray();
 
-                // let currentUser = resultSet.find(x => x);
+    //             // let currentUser = resultSet.find(x => x);
 
-                let allowedUsers = [ currentUser.email ];
+    //             let allowedUsers = [ currentUser.email ];
 
-                if (req.body.allowed_users) {
-                    let optionalUsers = req.body.allowed_users.split(", ");
+    //             if (req.body.allowed_users) {
+    //                 let optionalUsers = req.body.allowed_users.split(", ");
 
-                    optionalUsers.forEach((user) => {
-                        if (allAuthedUsers.includes(user) === true) {
-                            allowedUsers.push(user);
-                        }
-                    });
-                }
+    //                 optionalUsers.forEach((user) => {
+    //                     if (allAuthedUsers.includes(user) === true) {
+    //                         allowedUsers.push(user);
+    //                     }
+    //                 });
+    //             }
 
-                let allDocs = currentUser["docs"];
+    //             let allDocs = currentUser["docs"];
 
-                let newDoc = {
-                    _id: ObjectId(),
-                    name: req.body.name,
-                    content: req.body.content,
-                    allowed_users: allowedUsers
-                };
+    //             let newDoc = {
+    //                 _id: ObjectId(),
+    //                 name: req.body.name,
+    //                 content: req.body.content,
+    //                 allowed_users: allowedUsers
+    //             };
 
-                // console.log(allDocs);
-                // console.log(newDoc);
+    //             // console.log(allDocs);
+    //             // console.log(newDoc);
 
-                allDocs.push(newDoc);
-                // console.log(allDocs);
+    //             allDocs.push(newDoc);
+    //             // console.log(allDocs);
 
-                const addDoc = {
-                    $set: {
-                        docs: allDocs
-                    }
-                };
+    //             const addDoc = {
+    //                 $set: {
+    //                     docs: allDocs
+    //                 }
+    //             };
 
-                let options = { upsert: false };
+    //             let options = { upsert: false };
 
-                await db.collection.updateOne(filter, addDoc, options);
+    //             await db.collection.updateOne(filter, addDoc, options);
 
 
-                return res.status(204).send();
-            } catch (e) {
-                return res.status(500).json({
-                    error: {
-                        status: 500,
-                        path: "PUT /data UPDATE",
-                        title: "Database error",
-                        message: e.message
-                    }
-                });
-            } finally {
-                await db.client.close();
-            }
-        } else {
-            return res.status(500).json({
-                error: {
-                    status: 500,
-                    path: "PUT /data no email",
-                    title: "No id",
-                    message: "No data email provided"
-                }
-            });
-        }
-    },
-    updateDoc: async function (req, res) {
-        // req contains user object set in checkToken middleware
-        if (req.body._id) {
-            let _id = req.body._id;
-            let db;
+    //             return res.status(204).send();
+    //         } catch (e) {
+    //             return res.status(500).json({
+    //                 error: {
+    //                     status: 500,
+    //                     path: "PUT /data UPDATE",
+    //                     title: "Database error",
+    //                     message: e.message
+    //                 }
+    //             });
+    //         } finally {
+    //             await db.client.close();
+    //         }
+    //     } else {
+    //         return res.status(500).json({
+    //             error: {
+    //                 status: 500,
+    //                 path: "PUT /data no email",
+    //                 title: "No id",
+    //                 message: "No data email provided"
+    //             }
+    //         });
+    //     }
+    // },
+    // updateDoc: async function (req, res) {
+    //     // req contains user object set in checkToken middleware
+    //     if (req.body._id) {
+    //         let _id = req.body._id;
+    //         let db;
 
-            try {
-                db = await database.getDb();
+    //         try {
+    //             db = await database.getDb();
 
-                // check if allowed_users are all registered users
-                // const resultSet = await db.collection.find({}).toArray();
+    //             // check if allowed_users are all registered users
+    //             // const resultSet = await db.collection.find({}).toArray();
 
-                // let receivedDocs = Object.values(resultSet);
-                // let allAuthedUsers = [];
+    //             // let receivedDocs = Object.values(resultSet);
+    //             // let allAuthedUsers = [];
 
-                // for (const nestedArrayOfDocs of receivedDocs) {
-                //     allAuthedUsers.push(nestedArrayOfDocs.email);
-                // }
+    //             // for (const nestedArrayOfDocs of receivedDocs) {
+    //             //     allAuthedUsers.push(nestedArrayOfDocs.email);
+    //             // }
 
-                let allowedUsers = [];
+    //             let allowedUsers = [];
 
-                if (req.body.allowed_users) {
-                    console.log(req.body.allowed_users);
-                    let optionalUsers = req.body.allowed_users.split(", ");
+    //             if (req.body.allowed_users) {
+    //                 console.log(req.body.allowed_users);
+    //                 let optionalUsers = req.body.allowed_users.split(", ");
 
-                    optionalUsers.forEach((user) => {
-                        allowedUsers.push(user);
-                    });
-                }
+    //                 optionalUsers.forEach((user) => {
+    //                     allowedUsers.push(user);
+    //                 });
+    //             }
 
-                let options = { upsert: false };
+    //             let options = { upsert: false };
 
-                await db.collection.updateOne({"docs._id": ObjectId(_id)},
-                    {$set: {
-                        "docs.$.name": req.body.name,
-                        "docs.$.content": req.body.content,
-                        "docs.$.allowed_users": allowedUsers,
-                    }}, options);
-                return res.status(204).send();
-            } catch (e) {
-                return res.status(500).json({
-                    error: {
-                        status: 500,
-                        path: "PUT /data UPDATE",
-                        title: "Database error",
-                        message: e.message
-                    }
-                });
-            } finally {
-                await db.client.close();
-            }
-        } else {
-            return res.status(500).json({
-                error: {
-                    status: 500,
-                    path: "PUT /data no id",
-                    title: "No id",
-                    message: "No data id provided"
-                }
-            });
-        }
-    },
-    updateDocOnlyAuthedUsers: async function (req, res) {
-        // req contains user object set in checkToken middleware
-        if (req.body._id) {
-            let _id = req.body._id;
-            let db;
+    //             await db.collection.updateOne({"docs._id": ObjectId(_id)},
+    //                 {$set: {
+    //                     "docs.$.name": req.body.name,
+    //                     "docs.$.content": req.body.content,
+    //                     "docs.$.allowed_users": allowedUsers,
+    //                 }}, options);
+    //             return res.status(204).send();
+    //         } catch (e) {
+    //             return res.status(500).json({
+    //                 error: {
+    //                     status: 500,
+    //                     path: "PUT /data UPDATE",
+    //                     title: "Database error",
+    //                     message: e.message
+    //                 }
+    //             });
+    //         } finally {
+    //             await db.client.close();
+    //         }
+    //     } else {
+    //         return res.status(500).json({
+    //             error: {
+    //                 status: 500,
+    //                 path: "PUT /data no id",
+    //                 title: "No id",
+    //                 message: "No data id provided"
+    //             }
+    //         });
+    //     }
+    // },
+    // updateDocOnlyAuthedUsers: async function (req, res) {
+    //     // req contains user object set in checkToken middleware
+    //     if (req.body._id) {
+    //         let _id = req.body._id;
+    //         let db;
 
-            try {
-                db = await database.getDb();
+    //         try {
+    //             db = await database.getDb();
 
-                // check if allowed_users are all registered users
-                const resultSet = await db.collection.find({}).toArray();
+    //             // check if allowed_users are all registered users
+    //             const resultSet = await db.collection.find({}).toArray();
 
-                let receivedDocs = Object.values(resultSet);
-                let allAuthedUsers = [];
+    //             let receivedDocs = Object.values(resultSet);
+    //             let allAuthedUsers = [];
 
-                for (const nestedArrayOfDocs of receivedDocs) {
-                    allAuthedUsers.push(nestedArrayOfDocs.email);
-                }
+    //             for (const nestedArrayOfDocs of receivedDocs) {
+    //                 allAuthedUsers.push(nestedArrayOfDocs.email);
+    //             }
 
-                let allowedUsers = [];
+    //             let allowedUsers = [];
 
-                if (req.body.allowed_users) {
-                    let optionalUsers = req.body.allowed_users.split(", ");
+    //             if (req.body.allowed_users) {
+    //                 let optionalUsers = req.body.allowed_users.split(", ");
 
-                    optionalUsers.forEach((user) => {
-                        if (allAuthedUsers.includes(user) === true) {
-                            allowedUsers.push(user);
-                        }
-                    });
-                }
+    //                 optionalUsers.forEach((user) => {
+    //                     if (allAuthedUsers.includes(user) === true) {
+    //                         allowedUsers.push(user);
+    //                     }
+    //                 });
+    //             }
 
-                let options = { upsert: false };
+    //             let options = { upsert: false };
 
-                await db.collection.updateOne({"docs._id": ObjectId(_id)},
-                    {$set: {
-                        "docs.$.name": req.body.name,
-                        "docs.$.content": req.body.content,
-                        "docs.$.allowed_users": allowedUsers,
-                    }}, options);
-                return res.status(204).send();
-            } catch (e) {
-                return res.status(500).json({
-                    error: {
-                        status: 500,
-                        path: "PUT /data UPDATE",
-                        title: "Database error",
-                        message: e.message
-                    }
-                });
-            } finally {
-                await db.client.close();
-            }
-        } else {
-            return res.status(500).json({
-                error: {
-                    status: 500,
-                    path: "PUT /data no id",
-                    title: "No id",
-                    message: "No data id provided"
-                }
-            });
-        }
-    },
-    addAllowedUser: async function (req, res) {
-        // req contains user object set in checkToken middleware
-        if (req.body._id) {
-            let _id = req.body._id;
-            let db;
+    //             await db.collection.updateOne({"docs._id": ObjectId(_id)},
+    //                 {$set: {
+    //                     "docs.$.name": req.body.name,
+    //                     "docs.$.content": req.body.content,
+    //                     "docs.$.allowed_users": allowedUsers,
+    //                 }}, options);
+    //             return res.status(204).send();
+    //         } catch (e) {
+    //             return res.status(500).json({
+    //                 error: {
+    //                     status: 500,
+    //                     path: "PUT /data UPDATE",
+    //                     title: "Database error",
+    //                     message: e.message
+    //                 }
+    //             });
+    //         } finally {
+    //             await db.client.close();
+    //         }
+    //     } else {
+    //         return res.status(500).json({
+    //             error: {
+    //                 status: 500,
+    //                 path: "PUT /data no id",
+    //                 title: "No id",
+    //                 message: "No data id provided"
+    //             }
+    //         });
+    //     }
+    // },
+    // addAllowedUser: async function (req, res) {
+    //     // req contains user object set in checkToken middleware
+    //     if (req.body._id) {
+    //         let _id = req.body._id;
+    //         let db;
 
-            try {
-                db = await database.getDb();
+    //         try {
+    //             db = await database.getDb();
 
-                const filter = {"docs._id": ObjectId(_id)};
-                const currentUser = await db.collection.findOne(filter);
+    //             const filter = {"docs._id": ObjectId(_id)};
+    //             const currentUser = await db.collection.findOne(filter);
 
-                let allowedUsers = [];
-                let newUser = req.body.new_user;
+    //             let allowedUsers = [];
+    //             let newUser = req.body.new_user;
 
-                currentUser.docs.forEach((doc) => {
-                    if (doc._id == _id) {
-                        doc.allowed_users.push(newUser);
-                        allowedUsers = doc.allowed_users;
-                    }
-                });
+    //             currentUser.docs.forEach((doc) => {
+    //                 if (doc._id == _id) {
+    //                     doc.allowed_users.push(newUser);
+    //                     allowedUsers = doc.allowed_users;
+    //                 }
+    //             });
 
-                let options = { upsert: false };
+    //             let options = { upsert: false };
 
-                await db.collection.updateOne({"docs._id": ObjectId(_id)},
-                    {$set: {
-                        "docs.$.allowed_users": allowedUsers,
-                    }}, options);
-                return res.status(204).send();
-            } catch (e) {
-                return res.status(500).json({
-                    error: {
-                        status: 500,
-                        path: "PUT /data UPDATE",
-                        title: "Database error",
-                        message: e.message
-                    }
-                });
-            } finally {
-                await db.client.close();
-            }
-        } else {
-            return res.status(500).json({
-                error: {
-                    status: 500,
-                    path: "PUT /data no id",
-                    title: "No id",
-                    message: "No data id provided"
-                }
-            });
-        }
-    },
+    //             await db.collection.updateOne({"docs._id": ObjectId(_id)},
+    //                 {$set: {
+    //                     "docs.$.allowed_users": allowedUsers,
+    //                 }}, options);
+    //             return res.status(204).send();
+    //         } catch (e) {
+    //             return res.status(500).json({
+    //                 error: {
+    //                     status: 500,
+    //                     path: "PUT /data UPDATE",
+    //                     title: "Database error",
+    //                     message: e.message
+    //                 }
+    //             });
+    //         } finally {
+    //             await db.client.close();
+    //         }
+    //     } else {
+    //         return res.status(500).json({
+    //             error: {
+    //                 status: 500,
+    //                 path: "PUT /data no id",
+    //                 title: "No id",
+    //                 message: "No data id provided"
+    //             }
+    //         });
+    //     }
+    // },
     updateFromSocket: async function (req) {
         // req contains user object set in checkToken middleware
         if (req._id) {
@@ -627,50 +627,50 @@ const users = {
             return "Error, no id provided!";
         }
     },
-    deleteDoc: async function (req, res) {
-        // req contains user object set in checkToken middleware
-        if (req.body._id) {
-            let _id = req.body._id;
-            let filter = {
-                "docs._id": ObjectId(_id)
-            };
-            let db;
+    // deleteDoc: async function (req, res) {
+    //     // req contains user object set in checkToken middleware
+    //     if (req.body._id) {
+    //         let _id = req.body._id;
+    //         let filter = {
+    //             "docs._id": ObjectId(_id)
+    //         };
+    //         let db;
 
-            try {
-                db = await database.getDb();
+    //         try {
+    //             db = await database.getDb();
 
-                await db.collection.deleteOne(filter);
+    //             await db.collection.deleteOne(filter);
 
-                return res.status(200).send();
-            } catch (e) {
-                return res.status(500).json({
-                    error: {
-                        status: 500,
-                        path: "DELETE /data DELETE",
-                        title: "Database error",
-                        message: e.message
-                    }
-                });
-            } finally {
-                await db.client.close();
-            }
-        } else {
-            return res.status(500).json({
-                error: {
-                    status: 500,
-                    path: "DELETE /data no id",
-                    title: "No id",
-                    message: "No data id provided"
-                }
-            });
-        }
-    },
+    //             return res.status(200).send();
+    //         } catch (e) {
+    //             return res.status(500).json({
+    //                 error: {
+    //                     status: 500,
+    //                     path: "DELETE /data DELETE",
+    //                     title: "Database error",
+    //                     message: e.message
+    //                 }
+    //             });
+    //         } finally {
+    //             await db.client.close();
+    //         }
+    //     } else {
+    //         return res.status(500).json({
+    //             error: {
+    //                 status: 500,
+    //                 path: "DELETE /data no id",
+    //                 title: "No id",
+    //                 message: "No data id provided"
+    //             }
+    //         });
+    //     }
+    // },
     deleteOne: async function (req, res) {
         // req contains user object set in checkToken middleware
-        if (req.body._id) {
-            let _id = req.body._id;
+        if (req.body.email) {
+            let email = req.body.email;
             let filter = {
-                "_id": ObjectId(_id)
+                "email": email
             };
             let db;
 
@@ -696,9 +696,9 @@ const users = {
             return res.status(500).json({
                 error: {
                     status: 500,
-                    path: "DELETE /data no id",
-                    title: "No id",
-                    message: "No data id provided"
+                    path: "DELETE /data no email",
+                    title: "No email",
+                    message: "No email provided"
                 }
             });
         }

@@ -7,25 +7,25 @@ router.get('/',
     (req, res) => users.readAll(res)
 );
 
-router.get('/:id',
-    (req, res) => users.readOne(req.params.id, res)
-);
+// router.get('/:id',
+//     (req, res) => users.readOne(req.params.id, res)
+// );
 
-router.post('/',
-    (req, res) => users.addUser(req, res)
-);
+// router.post('/',
+//     (req, res) => users.addUser(req, res)
+// );
 
-router.put('/',
-    (req, res) => users.updateUserPassword(req, res)
-);
+// router.put('/',
+//     (req, res) => users.updateUserPassword(req, res)
+// );
 
-router.put('/add/allowed_user',
-    (req, res) => users.addAllowedUser(req, res)
-);
+// router.put('/add/allowed_user',
+//     (req, res) => users.addAllowedUser(req, res)
+// );
 
-router.put('/add/code',
-    (req, res) => users.addCode(req, res)
-);
+// router.put('/add/code',
+//     (req, res) => users.addCode(req, res)
+// );
 
 router.delete('/',
     (req, res) => users.deleteOne(req, res)

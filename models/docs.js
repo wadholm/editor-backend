@@ -2,39 +2,39 @@ const database = require("../db/dbusers.js");
 const ObjectId = require('mongodb').ObjectId;
 
 const docs = {
-    getAllowedDocs: async function(email, res) {
-        let db;
+    // getAllowedDocs: async function(email, res) {
+    //     let db;
 
-        try {
-            db = await database.getDb();
+    //     try {
+    //         db = await database.getDb();
 
-            const filter = { "docs.allowed_users": email };
+    //         const filter = { "docs.allowed_users": email };
 
 
-            const resultSet = await db.collection.find(filter).toArray();
-            let returnData;
+    //         const resultSet = await db.collection.find(filter).toArray();
+    //         let returnData;
 
-            let receivedData = Object.values(resultSet);
+    //         let receivedData = Object.values(resultSet);
 
-            returnData = receivedData.map(a => a.docs);
-            const concatDocs = [].concat.apply([], returnData);
+    //         returnData = receivedData.map(a => a.docs);
+    //         const concatDocs = [].concat.apply([], returnData);
 
-            return res.status(200).json({
-                data: concatDocs
-            });
-        } catch (err) {
-            return res.status(500).json({
-                errors: {
-                    status: 500,
-                    source: "/",
-                    title: "Database error",
-                    detail: err.message
-                }
-            });
-        } finally {
-            await db.client.close();
-        }
-    },
+    //         return res.status(200).json({
+    //             data: concatDocs
+    //         });
+    //     } catch (err) {
+    //         return res.status(500).json({
+    //             errors: {
+    //                 status: 500,
+    //                 source: "/",
+    //                 title: "Database error",
+    //                 detail: err.message
+    //             }
+    //         });
+    //     } finally {
+    //         await db.client.close();
+    //     }
+    // },
     addDoc: async function (req, res) {
         // req contains user object set in checkToken middleware
         if (req.body.email) {
@@ -81,8 +81,10 @@ const docs = {
                     req.body.name = "Unknown";
                 }
 
+                let newId = ObjectId();
+
                 let newDoc = {
-                    _id: ObjectId(),
+                    _id: newId,
                     name: req.body.name,
                     content: req.body.content,
                     allowed_users: allowedUsers
@@ -100,8 +102,12 @@ const docs = {
 
                 await db.collection.updateOne(filter, addDoc, options);
 
-
-                return res.status(204).send();
+                return res.status(201).json({
+                    data: {
+                        message: `Succesfully created a document.`,
+                        created_id: newId
+                    }
+                });
             } catch (e) {
                 return res.status(500).json({
                     error: {
@@ -119,7 +125,7 @@ const docs = {
                 error: {
                     status: 500,
                     path: "PUT /data no email",
-                    title: "No id",
+                    title: "No email",
                     message: "No data email provided"
                 }
             });
@@ -246,71 +252,71 @@ const docs = {
             });
         }
     },
-    updateFromSocket: async function (req) {
-        // req contains user object set in checkToken middleware
-        if (req._id) {
-            let _id = req._id;
-            let db;
+    // updateFromSocket: async function (req) {
+    //     // req contains user object set in checkToken middleware
+    //     if (req._id) {
+    //         let _id = req._id;
+    //         let db;
 
-            try {
-                db = await database.getDb();
+    //         try {
+    //             db = await database.getDb();
 
-                // const resultSet = await db.collection.find({}).toArray();
+    //             // const resultSet = await db.collection.find({}).toArray();
 
-                // let receivedDocs = Object.values(resultSet);
-                // let allAuthedUsers = [];
+    //             // let receivedDocs = Object.values(resultSet);
+    //             // let allAuthedUsers = [];
 
-                // for (const nestedArrayOfDocs of receivedDocs) {
-                //     allAuthedUsers.push(nestedArrayOfDocs.email);
-                // }
+    //             // for (const nestedArrayOfDocs of receivedDocs) {
+    //             //     allAuthedUsers.push(nestedArrayOfDocs.email);
+    //             // }
 
-                // let allowedUsers = [];
+    //             // let allowedUsers = [];
 
-                // if (req.allowed_users) {
-                //     let optionalUsers = req.allowed_users.split(", ");
+    //             // if (req.allowed_users) {
+    //             //     let optionalUsers = req.allowed_users.split(", ");
 
-                //     optionalUsers.forEach((user) => {
-                //         if (allAuthedUsers.includes(user) === true) {
-                //             allowedUsers.push(user);
-                //         }
-                //     });
-                // }
-                let allowedUsers = [];
+    //             //     optionalUsers.forEach((user) => {
+    //             //         if (allAuthedUsers.includes(user) === true) {
+    //             //             allowedUsers.push(user);
+    //             //         }
+    //             //     });
+    //             // }
+    //             let allowedUsers = [];
 
-                if (req.body.allowed_users) {
-                    let optionalUsers = req.body.allowed_users.split(", ");
+    //             if (req.body.allowed_users) {
+    //                 let optionalUsers = req.body.allowed_users.split(", ");
 
-                    optionalUsers.forEach((user) => {
-                        if (allowedUsers.includes(user) !== true) {
-                            // no duplicates
-                            allowedUsers.push(user);
-                        }
-                    });
-                }
+    //                 optionalUsers.forEach((user) => {
+    //                     if (allowedUsers.includes(user) !== true) {
+    //                         // no duplicates
+    //                         allowedUsers.push(user);
+    //                     }
+    //                 });
+    //             }
 
-                if (req.html == null) {
-                    req.html = "";
-                }
+    //             if (req.html == null) {
+    //                 req.html = "";
+    //             }
 
-                let options = { upsert: false };
+    //             let options = { upsert: false };
 
-                await db.collection.updateOne({"docs._id": ObjectId(_id)},
-                    {$set: {
-                        "docs.$.name": req.name,
-                        "docs.$.content": req.html,
-                        "docs.$.allowed_users": allowedUsers,
-                    }}, options);
+    //             await db.collection.updateOne({"docs._id": ObjectId(_id)},
+    //                 {$set: {
+    //                     "docs.$.name": req.name,
+    //                     "docs.$.content": req.html,
+    //                     "docs.$.allowed_users": allowedUsers,
+    //                 }}, options);
 
-                return "Success!!";
-            } catch (e) {
-                return "Error!";
-            } finally {
-                await db.client.close();
-            }
-        } else {
-            return "Error, no id provided!";
-        }
-    }
+    //             return "Success!!";
+    //         } catch (e) {
+    //             return "Error!";
+    //         } finally {
+    //             await db.client.close();
+    //         }
+    //     } else {
+    //         return "Error, no id provided!";
+    //     }
+    // }
 };
 
 module.exports = docs;
