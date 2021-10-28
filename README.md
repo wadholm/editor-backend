@@ -10,6 +10,7 @@ A document has the following attributes:
 _id
 name
 content
+allowed_users
 ```
 
 #### To get all documents
