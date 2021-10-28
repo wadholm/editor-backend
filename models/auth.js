@@ -6,13 +6,19 @@ const jwt = require("jsonwebtoken");
 let config;
 let jwtSecret;
 
-if (process.env.NODE_ENV !== 'test') {
-    config = require("../config.json");
-    jwtSecret = process.env.JWT_SECRET || config.token;
+// if (process.env.NODE_ENV !== 'test') {
+//     config = require("../config.json");
+//     jwtSecret = process.env.JWT_SECRET || config.token;
+// }
+
+try {
+    config = require('../config.json');
+} catch (error) {
+    console.error(error);
 }
 
-// const jwtSecret = process.env.JWT_SECRET || config.token;
-jwtSecret = process.env.JWT_SECRET;
+// const jwtSecret = process.env.JWT_SECRET || config.secret;
+jwtSecret = process.env.JWT_SECRET || config.secret;
 
 const auth = {
     login: async function(req, res) {
