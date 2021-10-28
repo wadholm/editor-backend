@@ -11,9 +11,8 @@ if (process.env.NODE_ENV !== 'test') {
     jwtSecret = process.env.JWT_SECRET || config.secret;
 }
 
-
-// const jwtSecret = process.env.JWT_SECRET || config.secret;
-jwtSecret = process.env.JWT_SECRET || config.secret;
+// const jwtSecret = process.env.JWT_SECRET || config.token;
+jwtSecret = process.env.JWT_SECRET;
 
 const auth = {
     login: async function(req, res) {
