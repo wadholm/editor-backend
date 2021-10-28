@@ -14,7 +14,7 @@ let _id = "";
 
 chai.use(chaiHttp);
 
-describe('Docs', () => {
+describe('Prev docs', () => {
     before(() => {
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve) => {

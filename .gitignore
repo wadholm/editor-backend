@@ -120,3 +120,5 @@ dist
 # editor specific
 config.json
 .env
+sendgrid.env
+sendgrid.env

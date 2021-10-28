@@ -88,7 +88,7 @@ const auth = {
                 return res.json({
                     data: {
                         type: "success",
-                        message: "User logged in",
+                        message: "User logged in.",
                         user: payload,
                         token: jwtToken
                     }

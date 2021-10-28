@@ -23,6 +23,10 @@ router.put('/add/allowed_user',
     (req, res) => users.addAllowedUser(req, res)
 );
 
+router.put('/add/code',
+    (req, res) => users.addCode(req, res)
+);
+
 router.delete('/',
     (req, res) => users.deleteOne(req, res)
 );

@@ -1,14 +1,14 @@
 const database = require("../db/dbusers.js");
 const ObjectId = require('mongodb').ObjectId;
 
-const docs = {
-    getAllowedDocs: async function(email, res) {
+const codes = {
+    getAllowedCodes: async function(email, res) {
         let db;
 
         try {
             db = await database.getDb();
 
-            const filter = { "docs.allowed_users": email };
+            const filter = { "codes.allowed_users": email };
 
 
             const resultSet = await db.collection.find(filter).toArray();
@@ -16,11 +16,11 @@ const docs = {
 
             let receivedData = Object.values(resultSet);
 
-            returnData = receivedData.map(a => a.docs);
-            const concatDocs = [].concat.apply([], returnData);
+            returnData = receivedData.map(a => a.codes);
+            const concatCodes = [].concat.apply([], returnData);
 
             return res.status(200).json({
-                data: concatDocs
+                data: concatCodes
             });
         } catch (err) {
             return res.status(500).json({
@@ -35,7 +35,7 @@ const docs = {
             await db.client.close();
         }
     },
-    addDoc: async function (req, res) {
+    addCode: async function (req, res) {
         // req contains user object set in checkToken middleware
         if (req.body.email) {
             let db;
@@ -48,12 +48,12 @@ const docs = {
 
                 const resultSet = await db.collection.find({}).toArray();
 
-                let receivedDocs = Object.values(resultSet);
+                let receivedCodes = Object.values(resultSet);
 
                 let allAuthedUsers = [];
 
-                for (const nestedArrayOfDocs of receivedDocs) {
-                    allAuthedUsers.push(nestedArrayOfDocs.email);
+                for (const nestedArrayOfCodes of receivedCodes) {
+                    allAuthedUsers.push(nestedArrayOfCodes.email);
                 }
 
                 let allowedUsers = [ currentUser.email ];
@@ -71,7 +71,7 @@ const docs = {
                     });
                 }
 
-                let allDocs = currentUser["docs"];
+                let allCodes = currentUser["codes"];
 
                 if (req.body.content == null) {
                     req.body.content = "";
@@ -81,24 +81,24 @@ const docs = {
                     req.body.name = "Unknown";
                 }
 
-                let newDoc = {
+                let newCode = {
                     _id: ObjectId(),
                     name: req.body.name,
                     content: req.body.content,
                     allowed_users: allowedUsers
                 };
 
-                allDocs.push(newDoc);
+                allCodes.push(newCode);
 
-                const addDoc = {
+                const addCode = {
                     $set: {
-                        docs: allDocs
+                        codes: allCodes
                     }
                 };
 
                 let options = { upsert: false };
 
-                await db.collection.updateOne(filter, addDoc, options);
+                await db.collection.updateOne(filter, addCode, options);
 
 
                 return res.status(204).send();
@@ -125,7 +125,7 @@ const docs = {
             });
         }
     },
-    updateDoc: async function (req, res) {
+    updateCode: async function (req, res) {
         // req contains user object set in checkToken middleware
         if (req.body._id) {
             let _id = req.body._id;
@@ -153,11 +153,11 @@ const docs = {
 
                 let options = { upsert: false };
 
-                await db.collection.updateOne({"docs._id": ObjectId(_id)},
+                await db.collection.updateOne({"codes._id": ObjectId(_id)},
                     {$set: {
-                        "docs.$.name": req.body.name,
-                        "docs.$.content": req.body.content,
-                        "docs.$.allowed_users": allowedUsers,
+                        "codes.$.name": req.body.name,
+                        "codes.$.content": req.body.content,
+                        "codes.$.allowed_users": allowedUsers,
                     }}, options);
                 return res.status(204).send();
             } catch (e) {
@@ -192,17 +192,17 @@ const docs = {
             try {
                 db = await database.getDb();
 
-                const filter = {"docs._id": ObjectId(_id)};
+                const filter = {"codes._id": ObjectId(_id)};
                 const currentUser = await db.collection.findOne(filter);
 
                 let allowedUsers = [];
                 let newUser = req.body.new_user;
 
-                // console.log(currentUser.docs);
+                // console.log(currentUser.codes);
 
-                currentUser.docs.forEach((doc) => {
-                    if (doc._id == _id) {
-                        if (doc.allowed_users.includes(newUser) === true) {
+                currentUser.codes.forEach((code) => {
+                    if (code._id == _id) {
+                        if (code.allowed_users.includes(newUser) === true) {
                             //user already exist
                             return res.status(500).json({
                                 error: {
@@ -210,17 +210,17 @@ const docs = {
                                     message: "user alredy exists"}
                             });
                         } else {
-                            doc.allowed_users.push(newUser);
+                            code.allowed_users.push(newUser);
                         }
-                        allowedUsers = doc.allowed_users;
+                        allowedUsers = code.allowed_users;
                     }
                 });
 
                 let options = { upsert: false };
 
-                await db.collection.updateOne({"docs._id": ObjectId(_id)},
+                await db.collection.updateOne({"codes._id": ObjectId(_id)},
                     {$set: {
-                        "docs.$.allowed_users": allowedUsers,
+                        "codes.$.allowed_users": allowedUsers,
                     }}, options);
                 return res.status(204).send();
             } catch (e) {
@@ -288,8 +288,8 @@ const docs = {
                     });
                 }
 
-                if (req.html == null) {
-                    req.html = "";
+                if (req.content == null) {
+                    req.content = "";
                 }
 
                 let options = { upsert: false };
@@ -297,7 +297,7 @@ const docs = {
                 await db.collection.updateOne({"docs._id": ObjectId(_id)},
                     {$set: {
                         "docs.$.name": req.name,
-                        "docs.$.content": req.html,
+                        "docs.$.content": req.content,
                         "docs.$.allowed_users": allowedUsers,
                     }}, options);
 
@@ -313,4 +313,4 @@ const docs = {
     }
 };
 
-module.exports = docs;
+module.exports = codes;

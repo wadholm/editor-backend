@@ -6,6 +6,7 @@ const {
 
 const UserType = require("./user.js");
 const DocType = require("./doc.js");
+const CodeType = require("./code.js");
 
 const users = require("../models/users");
 
@@ -50,6 +51,25 @@ const RootQueryType = new GraphQLObjectType({
             resolve: async function() {
                 return await getDocs();
             }
+        },
+        code: {
+            type: CodeType,
+            description: 'A single code-doc',
+            args: {
+                _id: { type: GraphQLString }
+            },
+            resolve: async function (parent, args) {
+                let codes = await getCodes();
+
+                return codes.find(code => code._id === args._id);
+            }
+        },
+        codes: {
+            type: GraphQLList(CodeType),
+            description: 'List of codes',
+            resolve: async function() {
+                return await getCodes();
+            }
         }
     })
 });
@@ -69,6 +89,23 @@ async function getDocs() {
     });
 
     return docs;
+}
+
+async function getCodes() {
+    let userArray = await users.readAll();
+    let codes = [];
+    let ids = [];
+
+    userArray.forEach(function(user) {
+        user["codes"].forEach(function(code) {
+            if (ids.indexOf(code._id) === -1) {
+                codes.push(code);
+                ids.push(code._id);
+            }
+        });
+    });
+
+    return codes;
 }
 
 module.exports = RootQueryType;

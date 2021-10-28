@@ -3,6 +3,9 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const bodyParser = require('body-parser');
+const sgMail = require('@sendgrid/mail');
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const visual = false;
 const { graphqlHTTP } = require('express-graphql');
@@ -18,7 +21,7 @@ const usersModel = require("./models/users.js");
 // eslint-disable-next-line no-unused-vars
 const { devUrl, prodUrl, token } = require("./variables");
 
-const ENDPOINT = prodUrl;
+const ENDPOINT = devUrl;
 
 const app = express();
 const server = require("http").createServer(app);
@@ -36,6 +39,7 @@ const docs = require('./routes/docs');
 const prevdocs = require('./routes/prevdocs');
 const users = require('./routes/users');
 const auth = require('./routes/auth');
+const codes = require('./routes/codes');
 
 const port = process.env.PORT || 1337;
 
@@ -79,11 +83,72 @@ app.use('/graphql', graphqlHTTP({
 }));
 
 
+app.post('/sendmail', (req, res) => {
+    let registerUrl = `http://localhost:3000/register=${req.body.recipient}`;
+
+    const msg = {
+        to: req.body.recipient, // Change to your recipient
+        from: 'malin.wadholm@gmail.com', // Change to your verified sender
+        subject: `Invitation! ${req.body.sender} has shared a document with you`,
+        text: (
+            `${req.body.sender} has invited you to edit a document. ` +
+            `If you don't have an account you must register first.` +
+            `Register here`
+        ),
+        html: (
+            `<body style="
+            background=#FFFFFF;
+            font-family: Helvetica Neue, sans-serif;
+            width: 90%;
+            color:rgb(40, 40, 40);
+            margin: auto;">`+
+            `<div style="
+            border-radius: 2%;
+            width: 75%;
+            box-shadow: 0 8px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+            margin: 2em auto;">` +
+            `<div style="padding: 2em;">` +
+            `<h2>Hello! </h2>`+
+            `<p>${req.body.sender} has invited you to edit a document. </p>` +
+            `<p>If you don't have an account you must register first. </p>`+
+            `<p>
+            <a href="${registerUrl}" style="
+            text-decoration: none;
+            color: white;
+            background-color: #2d7cfc;
+            border-radius: 5px;
+            border: none;
+            color: white;
+            padding: 0.8em 1.8em;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            cursor: pointer;
+            font-size: 1em;">Register here</a>` +
+            `</p>`+
+            `</div></div>`+
+            `<p style="text-align: right; padding-top: 1em;">Editor © Malin Wadholm 2021</p>`+
+            `</body>`
+        ),
+    };
+
+    sgMail
+        .send(msg)
+        .then(() => {
+            console.info('Email sent');
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    res.send('Successfully sent email!');
+});
+
 app.use('/', index);
 app.use('/docs', docs);
 app.use('/prevdocs', prevdocs);
 app.use('/users', users);
 app.use('/auth', auth);
+app.use('/codes', codes);
 
 io.on('connection', socket => {
     let prevID;

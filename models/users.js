@@ -197,6 +197,7 @@ const users = {
                     email: req.body.email,
                     password: hashedPassword,
                     docs: [],
+                    codes: []
                     // allowed_users: [req.body.email]
                 };
 
@@ -267,6 +268,28 @@ const users = {
                     message: "No data id provided"
                 }
             });
+        }
+    },
+    addCode: async function (req, res) {
+        // req contains user object set in checkToken middleware
+        let db;
+
+        try {
+            db = await database.getDb();
+            // await db.collection.updateOne(filter, updateUser, options);
+            await db.collection.updateMany({}, {$set: { codes: [] }});
+            return res.status(204).send();
+        } catch (e) {
+            return res.status(500).json({
+                error: {
+                    status: 500,
+                    path: "PUT /data UPDATE",
+                    title: "Database error",
+                    message: e.message
+                }
+            });
+        } finally {
+            await db.client.close();
         }
     },
     addDoc: async function (req, res) {
@@ -369,6 +392,68 @@ const users = {
                 db = await database.getDb();
 
                 // check if allowed_users are all registered users
+                // const resultSet = await db.collection.find({}).toArray();
+
+                // let receivedDocs = Object.values(resultSet);
+                // let allAuthedUsers = [];
+
+                // for (const nestedArrayOfDocs of receivedDocs) {
+                //     allAuthedUsers.push(nestedArrayOfDocs.email);
+                // }
+
+                let allowedUsers = [];
+
+                if (req.body.allowed_users) {
+                    console.log(req.body.allowed_users);
+                    let optionalUsers = req.body.allowed_users.split(", ");
+
+                    optionalUsers.forEach((user) => {
+                        allowedUsers.push(user);
+                    });
+                }
+
+                let options = { upsert: false };
+
+                await db.collection.updateOne({"docs._id": ObjectId(_id)},
+                    {$set: {
+                        "docs.$.name": req.body.name,
+                        "docs.$.content": req.body.content,
+                        "docs.$.allowed_users": allowedUsers,
+                    }}, options);
+                return res.status(204).send();
+            } catch (e) {
+                return res.status(500).json({
+                    error: {
+                        status: 500,
+                        path: "PUT /data UPDATE",
+                        title: "Database error",
+                        message: e.message
+                    }
+                });
+            } finally {
+                await db.client.close();
+            }
+        } else {
+            return res.status(500).json({
+                error: {
+                    status: 500,
+                    path: "PUT /data no id",
+                    title: "No id",
+                    message: "No data id provided"
+                }
+            });
+        }
+    },
+    updateDocOnlyAuthedUsers: async function (req, res) {
+        // req contains user object set in checkToken middleware
+        if (req.body._id) {
+            let _id = req.body._id;
+            let db;
+
+            try {
+                db = await database.getDb();
+
+                // check if allowed_users are all registered users
                 const resultSet = await db.collection.find({}).toArray();
 
                 let receivedDocs = Object.values(resultSet);
@@ -422,6 +507,58 @@ const users = {
             });
         }
     },
+    addAllowedUser: async function (req, res) {
+        // req contains user object set in checkToken middleware
+        if (req.body._id) {
+            let _id = req.body._id;
+            let db;
+
+            try {
+                db = await database.getDb();
+
+                const filter = {"docs._id": ObjectId(_id)};
+                const currentUser = await db.collection.findOne(filter);
+
+                let allowedUsers = [];
+                let newUser = req.body.new_user;
+
+                currentUser.docs.forEach((doc) => {
+                    if (doc._id == _id) {
+                        doc.allowed_users.push(newUser);
+                        allowedUsers = doc.allowed_users;
+                    }
+                });
+
+                let options = { upsert: false };
+
+                await db.collection.updateOne({"docs._id": ObjectId(_id)},
+                    {$set: {
+                        "docs.$.allowed_users": allowedUsers,
+                    }}, options);
+                return res.status(204).send();
+            } catch (e) {
+                return res.status(500).json({
+                    error: {
+                        status: 500,
+                        path: "PUT /data UPDATE",
+                        title: "Database error",
+                        message: e.message
+                    }
+                });
+            } finally {
+                await db.client.close();
+            }
+        } else {
+            return res.status(500).json({
+                error: {
+                    status: 500,
+                    path: "PUT /data no id",
+                    title: "No id",
+                    message: "No data id provided"
+                }
+            });
+        }
+    },
     updateFromSocket: async function (req) {
         // req contains user object set in checkToken middleware
         if (req._id) {
@@ -431,25 +568,44 @@ const users = {
             try {
                 db = await database.getDb();
 
-                const resultSet = await db.collection.find({}).toArray();
+                // const resultSet = await db.collection.find({}).toArray();
 
-                let receivedDocs = Object.values(resultSet);
-                let allAuthedUsers = [];
+                // let receivedDocs = Object.values(resultSet);
+                // let allAuthedUsers = [];
 
-                for (const nestedArrayOfDocs of receivedDocs) {
-                    allAuthedUsers.push(nestedArrayOfDocs.email);
-                }
+                // for (const nestedArrayOfDocs of receivedDocs) {
+                //     allAuthedUsers.push(nestedArrayOfDocs.email);
+                // }
+
+                // let allowedUsers = [];
+
+                // if (req.allowed_users) {
+                //     let optionalUsers = req.allowed_users.split(", ");
+
+                //     optionalUsers.forEach((user) => {
+                //         if (allAuthedUsers.includes(user) === true) {
+                //             allowedUsers.push(user);
+                //         }
+                //     });
+                // }
+
+                // console.log(req.allowed_users);
 
                 let allowedUsers = [];
 
-                if (req.allowed_users) {
-                    let optionalUsers = req.allowed_users.split(", ");
+                if (req.body.allowed_users) {
+                    let optionalUsers = req.body.allowed_users.split(", ");
 
                     optionalUsers.forEach((user) => {
-                        if (allAuthedUsers.includes(user) === true) {
+                        if (allowedUsers.includes(user) !== true) {
+                            // no duplicates
                             allowedUsers.push(user);
                         }
                     });
+                }
+
+                if (req.html == null) {
+                    req.html = "";
                 }
 
                 let options = { upsert: false };
@@ -457,8 +613,8 @@ const users = {
                 await db.collection.updateOne({"docs._id": ObjectId(_id)},
                     {$set: {
                         "docs.$.name": req.name,
-                        "docs.$.content": req.content,
-                        "docs.$.allowed_users": allowedUsers,
+                        "docs.$.content": req.html,
+                        "docs.$.allowed_users": req.allowedUsers,
                     }}, options);
 
                 return "Success!!";

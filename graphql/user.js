@@ -6,6 +6,7 @@ const {
 } = require('graphql');
 
 const DocType = require("./doc.js");
+const CodeType = require("./code.js");
 
 const UserType = new GraphQLObjectType({
     name: 'User',
@@ -17,6 +18,11 @@ const UserType = new GraphQLObjectType({
         docs: { type: GraphQLList(DocType),
             resolve: (user) => {
                 return user.docs;
+            }
+        },
+        codes: { type: GraphQLList(CodeType),
+            resolve: (user) => {
+                return user.codes;
             }
         }
     })
