@@ -84,7 +84,8 @@ app.use('/graphql', graphqlHTTP({
 
 
 app.post('/sendmail', (req, res) => {
-    let registerUrl = `http://localhost:3000/register=${req.body.recipient}`;
+    let registerUrl = `http://localhost:3000/?register=${req.body.recipient}`;
+    // let registerUrl = `${ENDPOINT}/~mack20/editor/?register=${req.body.recipient}`;
 
     const msg = {
         to: req.body.recipient, // Change to your recipient
