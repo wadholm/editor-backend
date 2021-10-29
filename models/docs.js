@@ -252,6 +252,44 @@ const docs = {
             });
         }
     },
+    // deleteDoc: async function (req, res) {
+    //     // req contains user object set in checkToken middleware
+    //     if (req.body._id) {
+    //         let _id = req.body._id;
+    //         let filter = {
+    //             "docs._id": ObjectId(_id)
+    //         };
+    //         let db;
+
+    //         try {
+    //             db = await database.getDb();
+
+    //             await db.collection.deleteOne(filter);
+
+    //             return res.status(200).send();
+    //         } catch (e) {
+    //             return res.status(500).json({
+    //                 error: {
+    //                     status: 500,
+    //                     path: "DELETE /data DELETE",
+    //                     title: "Database error",
+    //                     message: e.message
+    //                 }
+    //             });
+    //         } finally {
+    //             await db.client.close();
+    //         }
+    //     } else {
+    //         return res.status(500).json({
+    //             error: {
+    //                 status: 500,
+    //                 path: "DELETE /data no id",
+    //                 title: "No id",
+    //                 message: "No data id provided"
+    //             }
+    //         });
+    //     }
+    // },
     // updateFromSocket: async function (req) {
     //     // req contains user object set in checkToken middleware
     //     if (req._id) {
